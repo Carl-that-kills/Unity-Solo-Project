@@ -1,18 +1,33 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public int Health = 10;
+    public int maxHealth = 10;
+
     public float speed = 5.0f;
     public float jumpHeight = 10.0f;
     public float jumpDectectionHeight = 1.0f;
+    public float interactDistince;
+    public float fusionDmgInterval;
+
+    public bool attacking = false;
+    public bool fusionDmg = false;
 
     PlayerInput input;
+    public Transform weaponslot;
     Rigidbody rb;
     Camera playerCam;
+    public GameObject pickupObject;
+
+    public WeaponsBehavior currentWeapon;
 
     Ray jumpRay;
+    Ray interactRay;
+    RaycastHit interactHit;
     Vector2 moveInput = Vector2.zero;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,6 +37,12 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         jumpRay = new Ray();
         playerCam = Camera.main;
+
+        interactRay = new Ray();
+        weaponslot = playerCam.transform.GetChild(0);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void FixedUpdate()
@@ -35,8 +56,32 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Health <= 0)
+        {
+
+        }
+
         jumpRay.origin = transform.position;
         jumpRay.direction = -transform.up;
+
+        interactRay.origin = playerCam.transform.position;
+        interactRay.direction = playerCam.transform.forward;
+
+        if (Physics.Raycast(interactRay, out interactHit, interactDistince))
+        {
+            if (interactHit.collider.tag == "weapons")
+            {
+                pickupObject = interactHit.collider.gameObject;
+            }
+            else
+                pickupObject = null;
+        }
+        else
+            pickupObject = null;
+
+        if (currentWeapon)
+            if (currentWeapon.holdToAttack && attacking)
+                currentWeapon.fire();
 
         Vector3 tempMove = rb.linearVelocity;
 
@@ -59,4 +104,103 @@ public class PlayerController : MonoBehaviour
         if(Physics.Raycast(jumpRay, jumpDectectionHeight))
             rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
+
+    public void interact(InputAction.CallbackContext context)
+    {
+        if (context.ReadValueAsButton())
+        {
+            if (pickupObject)
+            {
+                if (pickupObject.tag == "weapon")
+                {
+                   pickupObject.GetComponent<WeaponsBehavior>().equip(this);
+                }
+
+                pickupObject = null;
+            }
+            else if (currentWeapon)
+                Reload();
+        }
+    }
+
+    public void Reload()
+    {
+        if (currentWeapon)
+            if (!currentWeapon.reloading)
+                currentWeapon.reload();
+    }
+
+    public void Attack(InputAction.CallbackContext context)
+    {
+        if (currentWeapon)
+        {
+            if (currentWeapon.holdToAttack)
+            {
+                if (context.ReadValueAsButton())
+                    attacking = true;
+                else
+                    attacking = false;
+            }
+
+            else if (context.ReadValueAsButton())
+                currentWeapon.fire();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Hazard")
+        {
+            Health--;
+        }
+
+        if (collision.gameObject.tag == "FusionHazard")
+        {
+            Health--;
+        }
+
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "FusionHazard")
+        {
+            if (!fusionDmg)
+            {
+                StartCoroutine("fusionDmgCooldown");
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "LevelEnd")
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "FusionHazard")
+        {
+            if (fusionDmg)
+            {
+                StopCoroutine("fusionDmgCooldown");
+                fusionDmg = false;
+            }
+        }
+    }
+
+    /*
+    IEnumerator fusionDmgCooldown()
+    {
+        fusionDmg = true;
+
+        yield return new WaitForSeconds(fusionDmgInterval);
+
+        Health--;
+        fusionDmg = false;
+    }
+    */
 }
