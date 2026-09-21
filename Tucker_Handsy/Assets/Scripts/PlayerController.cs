@@ -1,7 +1,7 @@
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(interactRay, out interactHit, interactDistince))
         {
-            if (interactHit.collider.tag == "weapons")
+            if (interactHit.collider.tag == "Weapons")
             {
                 pickupObject = interactHit.collider.gameObject;
             }
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
         {
             if (pickupObject)
             {
-                if (pickupObject.tag == "weapon")
+                if (pickupObject.tag == "Weapons")
                 {
                    pickupObject.GetComponent<WeaponsBehavior>().equip(this);
                 }
@@ -192,7 +192,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /*
+
+
     IEnumerator fusionDmgCooldown()
     {
         fusionDmg = true;
@@ -202,5 +203,5 @@ public class PlayerController : MonoBehaviour
         Health--;
         fusionDmg = false;
     }
-    */
+
 }

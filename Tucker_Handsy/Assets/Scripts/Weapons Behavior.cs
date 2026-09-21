@@ -13,17 +13,25 @@ public class WeaponsBehavior : MonoBehaviour
     public Camera firingDirection;
 
     [Header("Meta Attributes")]
-    public bool canFire = true;
+    public bool canAttack = true;
     public bool holdToAttack = true;
     public bool reloading = false;
     public int weaponID;
     public string weaponName;
 
     [Header("Weapon Stats")]
+    public string weaponType;
+    //Melee Stats
+    public float BluntDMG;
+    public float BluntSwing;
+    public float BluntSpeed;
+    public float BluntDelay;
+    //Gun Stats
     public float projLifespan;
     public float projVelocity;
     public float reloadCooldown;
     public float rof;
+    public float projDMG;
     public int fireModes;
     public int currentFireMode;
     public int clip;
@@ -69,37 +77,40 @@ public class WeaponsBehavior : MonoBehaviour
 
     public void reload()
     {
-        if (clip >= clipSize)
-            return;
-
-        int reloadCount = clipSize - clip;
-
-        if (ammo < reloadCount)
+        if (weaponType == "Gun")
         {
-            clip += ammo;
-            ammo = 0;
-        }
-        else
-        {
-            clip += reloadCount;
-            ammo -= reloadCount;
-        }
+            if (clip >= clipSize)
+                return;
 
-        reloading = true;
-        canFire = false;
-        StartCoroutine("reloadingCooldown");
+            int reloadCount = clipSize - clip;
+
+            if (ammo < reloadCount)
+            {
+                clip += ammo;
+                ammo = 0;
+            }
+            else
+            {
+                clip += reloadCount;
+                ammo -= reloadCount;
+            }
+
+            reloading = true;
+            canAttack = false;
+            StartCoroutine("reloadingCooldown");
+        }
     }
 
     public void fire()
     {
-        if (clip > 0 && canFire && !reloading)
+        if (clip > 0 && canAttack && !reloading)
         {
             clip--;
 
             GameObject p = Instantiate(projectile, firePoint.position, firePoint.rotation);
             p.GetComponent<Rigidbody>().AddForce(firingDirection.transform.forward * projVelocity);
             Destroy(p, projLifespan);
-            canFire = false;
+            canAttack = false;
             StartCoroutine("cooldownFire");
         }
     }
@@ -109,7 +120,7 @@ public class WeaponsBehavior : MonoBehaviour
         yield return new WaitForSeconds(reloadCooldown);
 
         reloading = false;
-        canFire = true;
+        canAttack = true;
     }
 
     IEnumerator cooldownFire()
@@ -117,7 +128,7 @@ public class WeaponsBehavior : MonoBehaviour
         yield return new WaitForSeconds(rof);
 
         if (clip > 0)
-            canFire = true;
+            canAttack = true;
     }
 
 
