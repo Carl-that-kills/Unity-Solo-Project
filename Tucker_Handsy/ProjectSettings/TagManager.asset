@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Weapons
   - Magics
+  - Enemy
   layers:
   - Default
   - TransparentFX

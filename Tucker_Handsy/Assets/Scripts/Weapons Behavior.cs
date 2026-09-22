@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 public class WeaponsBehavior : MonoBehaviour
 {
     PlayerController player;
-
+    
     [Header("Object Refrences")]
     public GameObject projectile;
     public Transform firePoint;
@@ -52,6 +52,11 @@ public class WeaponsBehavior : MonoBehaviour
 
     public void equip(PlayerController p)
     {
+        if (player.currentWeapon)
+        {
+            //player.currentWeapon.GetComponent<weapon>().unequip();
+        }
+
         player = p;
 
         player.currentWeapon = this;
