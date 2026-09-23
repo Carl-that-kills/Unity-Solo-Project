@@ -8,10 +8,11 @@ public class EnemyBehavior : MonoBehaviour
 
     public bool isFollowing = false;
 
-    public float EnemyDMG;
+    public int EnemyDMG;
     public int EnemyCooldown;
-    public bool EnemyCanAttack = false;
-    public bool EnemyAttacking = false;
+    public bool EnemyCanAttack = true;
+    public bool EnemyWantsToAttack = false;
+    public bool PlayerVunerable = false;
 
     public NavMeshAgent agent;
     public PlayerController player;
@@ -26,34 +27,31 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isFollowing)
+        if (isFollowing == true)
         {
             agent.destination = player.transform.position;
         }
-        if (EnemyCanAttack == true)
-        {
-            EnemyCanAttack = false;
-            EnemyAttacking = true;
-            
-            player.Health--;
 
-            StartCoroutine("EnemyCoolDown");
-        } else
+        if (EnemyWantsToAttack == true)
         {
-            return;
+            if (EnemyCanAttack == true)
+            {
+                player.Health = player.Health - EnemyDMG;
+                StartCoroutine("EnemyCoolDown");
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player");
+        if (other.tag == "Player")
         {
             isFollowing = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "player");
+        if (other.tag == "Player")
         {
             isFollowing = false;
         }
@@ -64,13 +62,9 @@ public class EnemyBehavior : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             isFollowing = false;
-
+            PlayerVunerable = true;
+            EnemyWantsToAttack = true;
             EnemyCanAttack = true;
-            
-            // Move if they have to get back to player, if collider isnt in collider move
-
-            // Set attacking boolean to true
-            // In update, make enemy attack and do damage to player while attacking
         }
     }
 
@@ -79,19 +73,20 @@ public class EnemyBehavior : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             isFollowing = true;
-            EnemyCanAttack = false;
-            EnemyAttacking = false;
+            EnemyWantsToAttack = false;
+            PlayerVunerable = false;
+
         }
     }
-
-    // Run a coroutine for a cooldown so the enemy doesn't keep trying to attack the player every instance
     IEnumerator EnemyCoolDown()
     {
-        yield return new WaitForSeconds(EnemyCooldown);
+        EnemyCanAttack = false;
 
-        if (EnemyAttacking == true)
+        yield return new WaitForSeconds(EnemyCooldown);
+        if(PlayerVunerable == true)
         {
             EnemyCanAttack = true;
         }
     }
+
 }

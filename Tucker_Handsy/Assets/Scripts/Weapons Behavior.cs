@@ -1,12 +1,15 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class WeaponsBehavior : MonoBehaviour
 {
     PlayerController player;
-    
+
     [Header("Object Refrences")]
     public GameObject projectile;
     public Transform firePoint;
@@ -42,6 +45,15 @@ public class WeaponsBehavior : MonoBehaviour
     public int maxAmmo;
     public int ammoRefill;
 
+    /*
+    [Header("Weapon Invitory")]
+    //public List<int> CollectedWeaponsID = new List<int>();
+    public static record int[]
+        CollectedWeaponsID = new[]
+    {
+            1, 2, 3, 4,
+    };
+    */
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,11 +64,6 @@ public class WeaponsBehavior : MonoBehaviour
 
     public void equip(PlayerController p)
     {
-        if (player.currentWeapon)
-        {
-            //player.currentWeapon.GetComponent<weapon>().unequip();
-        }
-
         player = p;
 
         player.currentWeapon = this;
