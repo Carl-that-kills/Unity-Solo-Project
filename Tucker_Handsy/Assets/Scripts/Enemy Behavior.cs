@@ -8,6 +8,7 @@ public class EnemyBehavior : MonoBehaviour
 
     public bool isFollowing = false;
 
+    public int EnemyHealth;
     public int EnemyDMG;
     public int EnemyCooldown;
     public bool EnemyCanAttack = true;
@@ -36,9 +37,17 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (EnemyCanAttack == true)
             {
-                player.Health = player.Health - EnemyDMG;
-                StartCoroutine("EnemyCoolDown");
+                if (player.Health > 0)
+                {
+                    player.Health = player.Health - EnemyDMG;
+                    StartCoroutine("EnemyCoolDown");
+                }
             }
+        }
+
+        if(EnemyHealth <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -59,7 +68,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             isFollowing = false;
             PlayerVunerable = true;

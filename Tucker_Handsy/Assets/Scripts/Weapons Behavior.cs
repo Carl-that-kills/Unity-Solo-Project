@@ -1,10 +1,5 @@
-using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.AnimatedValues;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class WeaponsBehavior : MonoBehaviour
 {
@@ -24,8 +19,8 @@ public class WeaponsBehavior : MonoBehaviour
 
     [Header("Weapon Stats")]
     public string weaponType;
+    public int weaponDMG;
     //Melee Stats
-    public float BluntDMG;
     public float BluntSwing;
     public float BluntSpeed;
     public float BluntDelay;
@@ -34,7 +29,6 @@ public class WeaponsBehavior : MonoBehaviour
     public float projVelocity;
     public float reloadCooldown;
     public float rof;
-    public float projDMG;
     public int fireModes;
     public int currentFireMode;
     public int clip;
@@ -45,16 +39,10 @@ public class WeaponsBehavior : MonoBehaviour
     public int maxAmmo;
     public int ammoRefill;
 
-    /*
+/*
     [Header("Weapon Invitory")]
     //public List<int> CollectedWeaponsID = new List<int>();
-    public static record int[]
-        CollectedWeaponsID = new[]
-    {
-            1, 2, 3, 4,
-    };
-    */
-
+*/
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

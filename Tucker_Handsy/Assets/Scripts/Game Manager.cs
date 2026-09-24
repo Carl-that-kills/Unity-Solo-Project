@@ -31,10 +31,7 @@ public class GameManager : MonoBehaviour
 
         if (player.currentWeapon)
         {
-            if (WeaponsBehavior.weaponType == "Gun")
-            {
                 TextAmmo.text = "Ammo" + player.currentWeapon.clip + "/" + player.currentWeapon.clipSize;
-            }
         }
         else
         {
