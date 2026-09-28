@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3890626191583465044}
   - component: {fileID: 7274921445813695455}
   - component: {fileID: -8531795791429761521}
+  - component: {fileID: 3119956288007027249}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Damager
@@ -137,8 +138,31 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &3119956288007027249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8004436280239342291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad06d1a79f9f13444b8d498e2c1b361a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bullet
+  isFollowing: 0
+  EnemyHealth: 0
+  EnemyDMG: 0
+  EnemyCooldown: 0
+  EnemyCanAttack: 1
+  EnemyWantsToAttack: 0
+  EnemyVunerable: 0
+  PlayerVunerable: 0
+  agent: {fileID: 0}
+  player: {fileID: 0}
+  weapon: {fileID: 0}

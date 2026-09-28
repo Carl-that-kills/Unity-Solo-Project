@@ -8,6 +8,8 @@ TagManager:
   - Magics
   - Enemy
   - Damager
+  - Hazard
+  - FusionHazard
   layers:
   - Default
   - TransparentFX

@@ -13,10 +13,12 @@ public class EnemyBehavior : MonoBehaviour
     public int EnemyCooldown;
     public bool EnemyCanAttack = true;
     public bool EnemyWantsToAttack = false;
+    public bool EnemyVunerable = false;
     public bool PlayerVunerable = false;
 
     public NavMeshAgent agent;
     public PlayerController player;
+    public WeaponsBehavior weapon;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
