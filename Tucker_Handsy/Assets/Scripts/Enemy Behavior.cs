@@ -25,6 +25,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        weapon = GameObject.FindGameObjectWithTag("Weapons").GetComponent<WeaponsBehavior>();
     }
 
     // Update is called once per frame
@@ -87,6 +88,10 @@ public class EnemyBehavior : MonoBehaviour
             EnemyWantsToAttack = false;
             PlayerVunerable = false;
 
+        }
+        if (collision.gameObject.tag == "Damager")
+        {
+            EnemyHealth = EnemyHealth - weapon.weaponDMG;
         }
     }
     IEnumerator EnemyCoolDown()

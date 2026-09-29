@@ -151,11 +151,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBehavior
   isFollowing: 0
-  EnemyHealth: 20
-  EnemyDMG: 10
-  EnemyCooldown: 5
+  EnemyHealth: 0
+  EnemyDMG: 0
+  EnemyCooldown: 0
   EnemyCanAttack: 0
   EnemyWantsToAttack: 0
+  EnemyVunerable: 0
   PlayerVunerable: 0
   agent: {fileID: 0}
   player: {fileID: 0}
